@@ -1,0 +1,2 @@
+MoviePy==1.0.0
+TkInter==8.6
