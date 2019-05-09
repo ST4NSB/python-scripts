@@ -19,4 +19,4 @@ Selecting the clip final length and then proceed
 ![final_length](example_img/finallength.png) (approx. 1 minute)
 
 ## License
-his project is licensed unde MIT [https://opensource.org/licenses/MIT/]
+This project is licensed unde MIT [https://opensource.org/licenses/MIT/]
