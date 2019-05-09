@@ -6,7 +6,7 @@ A simple GUI app to loop videos based either
 1. time length   
 
 Output is converted to the .mp4 format  
-Available formats are: mp4, avi, wav, GIF
+Available formats are: mp4, avi, wav, GIF  
 The best time render format is GIF
 
 ## Example
