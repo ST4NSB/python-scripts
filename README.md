@@ -10,12 +10,12 @@ Available formats are: mp4, avi, wav, GIF
 The best time render format is GIF
 
 ## Example
-Selecting first the method, then choosing the output clip length  
+Selecting the clip final length and then proceed 
 ![loop](example_img/loop_img.png)
 
-Initial clip length  
-![initial_length](example_img/initiallength.png)
-Final clip length  
+**Initial clip length**  
+![initial_length](example_img/initiallength.png)  
+**Final clip length**  
 ![final_length](example_img/finallength.png) (approx. 1 minute)
 
 ## License
