@@ -29,7 +29,6 @@ def shoot_now():
 
 #GunBlood y8 game
 #screen bar open + 91%, semi screen on left side
-#main
 
 start_x = 185
 start_y = 620
