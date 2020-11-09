@@ -18,7 +18,7 @@ def show_info(can_show):
 
 
 bounding_box_full = {'top': 389, 'left': 1337, 'width': 240, 'height': 87}
-#bounding_box = {'top': 480, 'left': 1370, 'width': 230, 'height': 50} # timer
+#timer= {'top': 480, 'left': 1370, 'width': 230, 'height': 50} # timer
 
 enter_nether = {'top': 389, 'left': 1337, 'width': 240, 'height': 22}
 exit_nether = {'top': 412, 'left': 1337, 'width': 240, 'height': 22}
@@ -38,7 +38,7 @@ while True:
     stronghold = np.median(np.array(sct.grab(finding_strong)))
     worldr = np.median(np.array(sct.grab(world_rec)))
 
-    show_info(can_show=False)
+    show_info(can_show=True)
 
     if enter < threshold and exit < threshold and stronghold < threshold and worldr < threshold:
         last_position = actual_position
