@@ -42,28 +42,28 @@ while True:
 
     if enter < threshold and exit < threshold and stronghold < threshold and worldr < threshold:
         last_position = actual_position
-        actual_position = 'not speedrunning'
+        actual_position = 'stopped speedrunning'
 
     if enter > threshold and exit < threshold and stronghold < threshold and worldr < threshold:
         last_position = actual_position
-        actual_position = 'enter nether'
+        actual_position = 'started a new game'
     if exit > threshold and enter < threshold and stronghold < threshold and worldr < threshold:
         last_position = actual_position
-        actual_position = 'exit nether'
+        actual_position = 'is in nether'
     if stronghold > threshold and enter < threshold and exit < threshold and worldr < threshold:
         last_position = actual_position
-        actual_position = 'finding stronghold'
+        actual_position = 'is looking for stronghold'
     if worldr > threshold and enter < threshold and exit < threshold and stronghold < threshold:
         last_position = actual_position
-        actual_position = 'world record!'
+        actual_position = 'is fighting dragon'
 
     if actual_position is not last_position:
-        print("Forsen position: ",actual_position.upper())
-        if actual_position == 'exit nether' or actual_position == 'not speedrunning':
+        print("Forsen ",actual_position.upper())
+        if actual_position == 'is in nether' or actual_position == 'stopped speedrunning':
             winsound.Beep(80, 800)
-        if actual_position == 'finding stronghold':
+        if actual_position == 'is looking for stronghold':
             winsound.Beep(500, 800)
-        if actual_position == 'world record':
+        if actual_position == 'is fighting dragon':
             winsound.Beep(1000, 800)
         #win32api.MessageBox(0, 'currently in: ' + actual_position.upper(), 'Forsen new position')
 
