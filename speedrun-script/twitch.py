@@ -38,7 +38,7 @@ while True:
     stronghold = np.median(np.array(sct.grab(finding_strong)))
     worldr = np.median(np.array(sct.grab(world_rec)))
 
-    show_info(can_show=True)
+    show_info(can_show=False)
 
     if enter < threshold and exit < threshold and stronghold < threshold and worldr < threshold:
         last_position = actual_position
@@ -59,8 +59,8 @@ while True:
 
     if actual_position is not last_position:
         print("Forsen ",actual_position.upper())
-        if actual_position == 'is in nether' or actual_position == 'stopped speedrunning':
-            winsound.Beep(80, 800)
+        #f actual_position == 'is in nether' or actual_position == 'stopped speedrunning':
+        #    winsound.Beep(60, 800)
         if actual_position == 'is looking for stronghold':
             winsound.Beep(500, 800)
         if actual_position == 'is fighting dragon':
