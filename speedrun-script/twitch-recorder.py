@@ -1,16 +1,11 @@
-# This code is based on tutorial by slicktechies modified as needed to use oauth token from Twitch.
-# You can read more details at: https://www.junian.net/2017/01/how-to-record-twitch-streams.html
-# original code is from https://slicktechies.com/how-to-watchrecord-twitch-streams-using-livestreamer/
-
 import requests
 import os
 import time
-import json
 import sys
 import subprocess
 import datetime
 import getopt
-
+import shutil
 
 class TwitchRecorder:
     def __init__(self):
@@ -19,25 +14,23 @@ class TwitchRecorder:
         # get oauth token value by typing `streamlink --twitch-oauth-authenticate` in terminal
         self.oauth_token = "9gbk1aw3vljm8l4ez8wdf57psjrm2f"
         self.ffmpeg_path = 'D:/Programs/ffmpeg/bin/ffmpeg.exe'
-        self.refresh = 30.0
-        self.root_path = "/Users/twitch"
+        self.refresh = 60.0
+        self.root_path = "\\Streams\\twitch"
 
         # user configuration
         self.username = "xqcow"
-        self.quality = "best"
+        self.user_id = '71092938'
+        self.quality = "720p60"
+
+        # path to recorded stream
+        self.recorded_path = self.root_path
 
     def run(self):
-        # path to recorded stream
-        self.recorded_path = os.path.join(self.root_path, "recorded", self.username)
-
         # path to finished video, errors removed
-        self.processed_path = os.path.join(self.root_path, "processed", self.username)
 
         # create directory for recordedPath and processedPath if not exist
         if (os.path.isdir(self.recorded_path) is False):
             os.makedirs(self.recorded_path)
-        if (os.path.isdir(self.processed_path) is False):
-            os.makedirs(self.processed_path)
 
         # make sure the interval to check user availability is not less than 15 seconds
         if (self.refresh < 15):
@@ -46,6 +39,7 @@ class TwitchRecorder:
             print("System set check interval to 15 seconds.")
 
         # fix videos from previous recording session
+        '''
         try:
             video_list = [f for f in os.listdir(self.recorded_path) if
                           os.path.isfile(os.path.join(self.recorded_path, f))]
@@ -63,6 +57,7 @@ class TwitchRecorder:
                     print(e)
         except Exception as e:
             print(e)
+        '''
 
         print("Checking for", self.username, "every", self.refresh, "seconds. Record with", self.quality, "quality.")
         self.loopcheck()
@@ -72,14 +67,14 @@ class TwitchRecorder:
         # 1: offline,
         # 2: not found,
         # 3: error
-        url = 'https://api.twitch.tv/helix/streams?user_id=71092938' #xqcoW #+ self.username
+        url = 'https://api.twitch.tv/helix/streams?user_id=' + self.user_id
         info = None
         status = 3
         try:
             r = requests.get(url,  headers={"Client-ID": self.client_id, "Authorization": "Bearer " + self.oauth_token}, timeout=15)
             r.raise_for_status()
             info = r.json()
-            if info['type'] is None: # dictionary check problem here
+            if info['data'][0].get("type") is None: # dictionary check problem here
                 status = 1
             else:
                 status = 0
@@ -105,8 +100,7 @@ class TwitchRecorder:
                 time.sleep(self.refresh)
             elif status == 0:
                 print(self.username, "online. Stream recording in session.")
-                filename = self.username + " - " + datetime.datetime.now().strftime("%Y-%m-%d %Hh%Mm%Ss") + " - " + (
-                info['stream']).get("channel").get("status") + ".mp4"
+                filename = "live.mp4"
 
                 # clean filename from unecessary characters
                 filename = "".join(x for x in filename if x.isalnum() or x in [" ", "-", "_", "."])
@@ -134,8 +128,7 @@ class TwitchRecorder:
                 time.sleep(self.refresh)
 
 
-def main(argv):
-    twitch_recorder = TwitchRecorder()
+def process_stream(argv):
     usage_message = 'twitch-recorder.py -u <username> -q <quality>'
 
     try:
@@ -152,8 +145,8 @@ def main(argv):
         elif opt in ("-q", "--quality"):
             twitch_recorder.quality = arg
 
-    twitch_recorder.run()
-
-
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    shutil.rmtree('/Streams', ignore_errors=True)
+    twitch_recorder = TwitchRecorder()
+    process_stream(sys.argv[1:])
+    twitch_recorder.run()

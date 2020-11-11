@@ -5,6 +5,12 @@ import win32api
 import winsound
 
 
+cap = cv2.VideoCapture("\\Streams\\twitch\\recorded\\forsen\\forsen.mp4", cv2.CAP_FFMPEG) 
+
+if (cap.isOpened() == False): 
+    print("Error opening video stream or file") 
+else: print("NO opening errors! Good to go!")
+
 def show_info(can_show):
     if can_show:
         b_box = np.array(sct.grab(bounding_box_full))
@@ -31,14 +37,18 @@ threshold = 100
 actual_position = ''
 last_position = ''
 
-while True:
+
+
+while cap.isOpened():
+
+    ret, frame = cap.read() 
 
     enter = np.median(np.array(sct.grab(enter_nether)))
     exit = np.median(np.array(sct.grab(exit_nether)))
     stronghold = np.median(np.array(sct.grab(finding_strong)))
     worldr = np.median(np.array(sct.grab(world_rec)))
 
-    show_info(can_show=False)
+    show_info(can_show=True)
 
     if enter < threshold and exit < threshold and stronghold < threshold and worldr < threshold:
         last_position = actual_position
@@ -69,4 +79,4 @@ while True:
 
     if (cv2.waitKey(1) & 0xFF) == ord('p'):
         cv2.destroyAllWindows()
-        break
+        break   
