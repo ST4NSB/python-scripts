@@ -42,40 +42,42 @@ last_position = ''
 while cap.isOpened():
 
     ret, frame = cap.read() 
+    
+    if ret == True: 
 
-    enter = np.median(np.array(sct.grab(enter_nether)))
-    exit = np.median(np.array(sct.grab(exit_nether)))
-    stronghold = np.median(np.array(sct.grab(finding_strong)))
-    worldr = np.median(np.array(sct.grab(world_rec)))
+        enter = np.median(np.array(sct.grab(enter_nether)))
+        exit = np.median(np.array(sct.grab(exit_nether)))
+        stronghold = np.median(np.array(sct.grab(finding_strong)))
+        worldr = np.median(np.array(sct.grab(world_rec)))
 
-    show_info(can_show=True)
+        show_info(can_show=True)
 
-    if enter < threshold and exit < threshold and stronghold < threshold and worldr < threshold:
-        last_position = actual_position
-        actual_position = 'stopped speedrunning'
+        if enter < threshold and exit < threshold and stronghold < threshold and worldr < threshold:
+            last_position = actual_position
+            actual_position = 'stopped speedrunning'
 
-    if enter > threshold and exit < threshold and stronghold < threshold and worldr < threshold:
-        last_position = actual_position
-        actual_position = 'started a new game'
-    if exit > threshold and enter < threshold and stronghold < threshold and worldr < threshold:
-        last_position = actual_position
-        actual_position = 'is in nether'
-    if stronghold > threshold and enter < threshold and exit < threshold and worldr < threshold:
-        last_position = actual_position
-        actual_position = 'is looking for stronghold'
-    if worldr > threshold and enter < threshold and exit < threshold and stronghold < threshold:
-        last_position = actual_position
-        actual_position = 'is fighting dragon'
+        if enter > threshold and exit < threshold and stronghold < threshold and worldr < threshold:
+            last_position = actual_position
+            actual_position = 'started a new game'
+        if exit > threshold and enter < threshold and stronghold < threshold and worldr < threshold:
+            last_position = actual_position
+            actual_position = 'is in nether'
+        if stronghold > threshold and enter < threshold and exit < threshold and worldr < threshold:
+            last_position = actual_position
+            actual_position = 'is looking for stronghold'
+        if worldr > threshold and enter < threshold and exit < threshold and stronghold < threshold:
+            last_position = actual_position
+            actual_position = 'is fighting dragon'
 
-    if actual_position is not last_position:
-        print("Forsen ",actual_position.upper())
-        #f actual_position == 'is in nether' or actual_position == 'stopped speedrunning':
-        #    winsound.Beep(60, 800)
-        if actual_position == 'is looking for stronghold':
-            winsound.Beep(500, 800)
-        if actual_position == 'is fighting dragon':
-            winsound.Beep(1000, 800)
-        #win32api.MessageBox(0, 'currently in: ' + actual_position.upper(), 'Forsen new position')
+        if actual_position is not last_position:
+            print("Forsen ",actual_position.upper())
+            #f actual_position == 'is in nether' or actual_position == 'stopped speedrunning':
+            #    winsound.Beep(60, 800)
+            if actual_position == 'is looking for stronghold':
+                winsound.Beep(500, 800)
+            if actual_position == 'is fighting dragon':
+                winsound.Beep(1000, 800)
+            #win32api.MessageBox(0, 'currently in: ' + actual_position.upper(), 'Forsen new position')
 
     if (cv2.waitKey(1) & 0xFF) == ord('p'):
         cv2.destroyAllWindows()

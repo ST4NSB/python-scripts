@@ -18,8 +18,8 @@ class TwitchRecorder:
         self.root_path = "\\Streams\\twitch"
 
         # user configuration
-        self.username = "xqcow"
-        self.user_id = '71092938'
+        self.username = "squillakilla"
+        self.user_id = '61855433'
         self.quality = "720p60"
 
         # path to recorded stream
