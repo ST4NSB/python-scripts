@@ -6,6 +6,7 @@ from win10toast_click import ToastNotifier
 import webbrowser
 import time
 from colorama import Fore, Style, init
+import datetime
 
 # -- User controls
 
@@ -34,7 +35,8 @@ notif_sent = False
 
 while True:
     if notif_sent:
-        print(f"Sleeping: {wait_time_before_notifications_seconds} seconds.")
+        if show_debug_text:
+            print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Sleeping: {wait_time_before_notifications_seconds} seconds.")
         time.sleep(wait_time_before_notifications_seconds)
         notif_sent = False
     
@@ -94,7 +96,7 @@ while True:
                 confidence = ocr_res[0][2]
 
                 if show_debug_text:
-                    print(f"Detected text: '{text}', confidence: '{confidence}'")
+                    print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Detected text: '{text}', confidence: '{confidence}'")
                 
                 patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI', 'IG1']
                 igt_number_recognized = '161'
@@ -112,7 +114,7 @@ while True:
                     if len(digits_only) >= 4:
                         minutes = digits_only[:2]
                         seconds = digits_only[2:4]
-                        notif_message = f"forsen mc in-game time is: {minutes}:{seconds}"
+                        notif_message = f"[{datetime.datetime.now().strftime('%H:%M:%S')}] forsen mc in-game time is: {minutes}:{seconds}"
                         
                         if show_debug_text: 
                             print(notif_message)
