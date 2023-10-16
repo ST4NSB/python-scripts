@@ -5,6 +5,7 @@ import easyocr
 from win10toast_click import ToastNotifier
 import webbrowser
 import time
+from colorama import Fore, Style, init
 
 # -- User controls
 
@@ -19,9 +20,10 @@ show_debug_text = True # True
 # -----------------
 
 skip_frames = 440 # 440
-max_ocr_checks = 15 # 15
+max_ocr_checks = 10 # 10
 notif_duration_seconds = 10 # 10
 
+init(autoreset=True)
 stream = streamlink.streams(url)
 if not stream:
     raise ValueError(f"The stream '{url}' is not LIVE or AVAILABLE")
@@ -94,11 +96,17 @@ while True:
                 if show_debug_text:
                     print(f"Detected text: '{text}', confidence: '{confidence}'")
                 
-                patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI']
+                patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI', 'IG1']
                 igt_number_recognized = '161'
-                if any([x in text.upper() for x in patterns]) or text.startswith(igt_number_recognized):
+                text = text.upper()
+
+                if any([x in text for x in patterns]) or text.startswith(igt_number_recognized):
                     if text.startswith(igt_number_recognized):
                         text = text[3:]
+
+                    for word in patterns:
+                        text = text.replace(word, "")
+                    
                     digits_only = re.sub(r'\D', '', text)
                     
                     if len(digits_only) >= 4:
@@ -109,6 +117,9 @@ while True:
                         if show_debug_text: 
                             print(notif_message)
                         if int(minutes) >= notice_minutes and int(minutes) <= notice_minutes_max_allowed:
+                            if show_debug_text:
+                                print(Fore.RED + f"{notif_message.upper()}" + Style.RESET_ALL)
+
                             toaster = ToastNotifier()
                             title = "forsen minecraft"
                             message = notif_message
