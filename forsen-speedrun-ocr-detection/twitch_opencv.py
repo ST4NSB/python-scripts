@@ -14,7 +14,7 @@ url = "https://www.twitch.tv/forsen"
 
 # -- User controls
 
-notify_from_minute = 6 # Notifies the user when the in-game time is equal to or greater than this value
+notify_from_minute = 7 # Notifies the user when the in-game time is equal to or greater than this value
 notify_until_including_minute = 16 # Notifies the user when the in-game time is equal to or less than this value
 
 # -- Debug controls
@@ -24,13 +24,13 @@ show_debug = False # False
 # -- Notification controls
 
 show_notification = True # True
-wait_time_before_sending_notifications_in_seconds = 60 # 60
+wait_time_before_sending_notifications_in_seconds = 40 # 40
 
 # -----------------------------
 
 skip_frames = 440 # 440
 max_ocr_checks = 10 # 10
-notif_duration_seconds = 20 # 20
+notif_duration_seconds = 30 # 30
 
 init(autoreset=True)
 stream = streamlink.streams(url)
