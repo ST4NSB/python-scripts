@@ -19,7 +19,7 @@ notify_until_including_minute = 16 # Notifies the user when the in-game time is 
 
 # -- Debug controls
 
-show_debug = False # False
+show_debug = True # False
 
 # -- Notification controls
 
@@ -103,12 +103,15 @@ while True:
             if ocr_res:
                 text = ocr_res[0][1]
                 confidence = ocr_res[0][2]
-
+                       
                 if show_debug:
                     print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Detected text: '{text}', confidence: '{confidence}'")
+                    
+                if confidence < 0.45:
+                    continue
                 
-                patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI', 'IG1']
-                igt_number_recognized = '161'
+                patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI', 'IG1', '1O1']
+                igt_number_recognized = ('161', '101')
                 text = text.upper()
 
                 if any([x in text for x in patterns]) or text.startswith(igt_number_recognized):
