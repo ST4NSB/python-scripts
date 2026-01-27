@@ -19,7 +19,8 @@ notify_until_including_minute = 16 # Notifies the user when the in-game time is 
 
 # -- Debug controls
 
-show_debug = False # False
+show_debug_text = True
+show_debug_video = False
 
 # -- Notification controls
 
@@ -43,7 +44,7 @@ notif_sent = False
 
 while True:
     if notif_sent:
-        if show_debug:
+        if show_debug_text:
             print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Sleeping: {wait_time_before_sending_notifications_in_seconds} seconds.")
         time.sleep(wait_time_before_sending_notifications_in_seconds)
         notif_sent = False
@@ -92,7 +93,7 @@ while True:
         except:
             pass
         
-        if show_debug:
+        if show_debug_video:
             cv2.imshow("Twitch Stream", image)
         
         if enable_ocr:
@@ -104,7 +105,7 @@ while True:
                 text = ocr_res[0][1]
                 confidence = ocr_res[0][2]
                        
-                if show_debug:
+                if show_debug_text:
                     print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Detected text: '{text}', confidence: '{confidence}'")
                     
                 if confidence < 0.45:
@@ -128,10 +129,10 @@ while True:
                         seconds = digits_only[2:4]
                         notif_message = f"[{datetime.datetime.now().strftime('%H:%M:%S')}] forsen mc in-game time is: {minutes}:{seconds}"
                         
-                        if show_debug: 
+                        if show_debug_text: 
                             print(notif_message)
                         if int(minutes) >= notify_from_minute and int(minutes) <= notify_until_including_minute:
-                            if show_debug:
+                            if show_debug_text:
                                 print(Fore.RED + f"{notif_message.upper()}" + Style.RESET_ALL)
 
                             if show_notification:
@@ -152,7 +153,7 @@ while True:
 
         passed_frames += 1
 
-        if show_debug:
+        if show_debug_video:
             if cv2.waitKey(1) & 0xFF == ord('d'):
                 enable_ocr = False
             if cv2.waitKey(1) & 0xFF == ord('e'):
@@ -160,7 +161,7 @@ while True:
     
     try:
         cap.release()
-        if show_debug:
+        if show_debug_video:
             cv2.destroyAllWindows()
     except:
         pass
