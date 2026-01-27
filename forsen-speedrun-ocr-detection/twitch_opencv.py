@@ -14,7 +14,7 @@ url = "https://www.twitch.tv/forsen"
 
 # -- User controls
 
-notify_from_minute = 7 # Notifies the user when the in-game time is equal to or greater than this value
+notify_from_minute = 6 # Notifies the user when the in-game time is equal to or greater than this value
 notify_until_including_minute = 16 # Notifies the user when the in-game time is equal to or less than this value
 
 # -- Debug controls
@@ -107,13 +107,14 @@ while True:
                        
                 if show_debug_text:
                     print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Detected text: '{text}', confidence: '{confidence}'")
-                    
-                if confidence < 0.45:
-                    continue
                 
-                patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI', 'IG1', '1O1']
+                patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI', 'IG1', '1O1', 'IT']
                 igt_number_recognized = ('161', '101')
+                text = text.replace(" ", "").replace("'", "").replace("'", "").replace("`", "")
                 text = text.upper()
+                
+                if show_debug_text:
+                    print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Processed text: '{text}'")
 
                 if any([x in text for x in patterns]) or text.startswith(igt_number_recognized):
                     if text.startswith(igt_number_recognized):
@@ -132,6 +133,11 @@ while True:
                         if show_debug_text: 
                             print(notif_message)
                         if int(minutes) >= notify_from_minute and int(minutes) <= notify_until_including_minute:
+                            if confidence < 0.5:
+                                if show_debug_text:
+                                    print(Fore.YELLOW + f"Low confidence ({confidence}) for detected time '{minutes}:{seconds}'. Notification not sent." + Style.RESET_ALL)
+                                continue
+                            
                             if show_debug_text:
                                 print(Fore.RED + f"{notif_message.upper()}" + Style.RESET_ALL)
 
