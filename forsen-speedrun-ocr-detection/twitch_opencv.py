@@ -11,8 +11,8 @@ import datetime
 # -- User controls
 
 url = "https://www.twitch.tv/forsen" # forsen
-notice_minutes = 10 # 10
-notice_minutes_max_allowed = 17 # 17
+notice_minutes = 7 # 7
+notice_minutes_max_allowed = 16 # 16
 wait_time_before_notifications_seconds = 60 * 1 # 60 * 1
 show_debug_video = False # False
 show_debug_image = False # False
