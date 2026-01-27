@@ -10,16 +10,19 @@ import datetime
 
 # -- User controls
 
-url = "https://www.twitch.tv/forsen" # forsen
-notice_minutes = 7 # 7
-notice_minutes_max_allowed = 16 # 16
-wait_time_before_notifications_seconds = 60 * 1 # 60 * 1
-show_debug_video = False # False
-show_debug_image = False # False
+url = "https://www.twitch.tv/forsen" # Tne URL of the Twitch stream to monitor
+notify_from_minute = 6 # Notifies the user when the in-game time is equal to or greater than this value
+notify_until_minute = 16 # Notifies the user when the in-game time is equal to or less than this value
+
+# -- Debug controls
+
 show_debug_text = True # True
+show_debug_video = False # False
+show_debug_sample_image = False # False
 
 # -----------------
 
+wait_time_before_sending_notifications_in_seconds = 60 * 1 # 60 * 1
 skip_frames = 440 # 440
 max_ocr_checks = 10 # 10
 notif_duration_seconds = 10 # 10
@@ -36,8 +39,8 @@ notif_sent = False
 while True:
     if notif_sent:
         if show_debug_text:
-            print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Sleeping: {wait_time_before_notifications_seconds} seconds.")
-        time.sleep(wait_time_before_notifications_seconds)
+            print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Sleeping: {wait_time_before_sending_notifications_in_seconds} seconds.")
+        time.sleep(wait_time_before_sending_notifications_in_seconds)
         notif_sent = False
     
     cap = cv2.VideoCapture(stream_url)
@@ -62,7 +65,7 @@ while True:
         if passed_frames >= skip_frames:
             enable_ocr = True
        
-        if show_debug_image:
+        if show_debug_sample_image:
             image = cv2.imread('tess_photo_test.png') # test image
         else:
             ret, frame = cap.read()
@@ -118,7 +121,7 @@ while True:
                         
                         if show_debug_text: 
                             print(notif_message)
-                        if int(minutes) >= notice_minutes and int(minutes) <= notice_minutes_max_allowed:
+                        if int(minutes) >= notify_from_minute and int(minutes) <= notify_until_minute:
                             if show_debug_text:
                                 print(Fore.RED + f"{notif_message.upper()}" + Style.RESET_ALL)
 
