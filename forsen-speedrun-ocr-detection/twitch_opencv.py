@@ -10,7 +10,7 @@ import datetime
 
 # -- User controls
 
-url = "https://www.twitch.tv/forsen" # Tne URL of the Twitch stream to monitor
+url = "https://www.twitch.tv/forsen" # The URL of the Twitch stream to monitor
 notify_from_minute = 6 # Notifies the user when the in-game time is equal to or greater than this value
 notify_until_minute = 16 # Notifies the user when the in-game time is equal to or less than this value
 
