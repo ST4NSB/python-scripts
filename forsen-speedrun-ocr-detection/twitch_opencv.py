@@ -19,7 +19,7 @@ notify_until_including_minute = 16 # Notifies the user when the in-game time is 
 
 # -- Debug controls
 
-show_debug = True # False
+show_debug = False # False
 
 # -- Notification controls
 
