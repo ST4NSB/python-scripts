@@ -110,7 +110,7 @@ while True:
                 
                 patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI', 'IG1', '1O1', 'IT']
                 igt_number_recognized = ('161', '101')
-                text = text.replace(" ", "").replace("'", "").replace("'", "").replace("`", "")
+                text = text.replace(" ", "").replace("'", "").replace("`", "")
                 text = text.upper()
                 
                 if show_debug_text:
