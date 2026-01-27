@@ -8,24 +8,29 @@ import time
 from colorama import Fore, Style, init
 import datetime
 
+# -- Twitch stream URL
+
+url = "https://www.twitch.tv/forsen"
+
 # -- User controls
 
-url = "https://www.twitch.tv/forsen" # The URL of the Twitch stream to monitor
 notify_from_minute = 6 # Notifies the user when the in-game time is equal to or greater than this value
-notify_until_minute = 16 # Notifies the user when the in-game time is equal to or less than this value
+notify_until_including_minute = 16 # Notifies the user when the in-game time is equal to or less than this value
 
 # -- Debug controls
 
-show_debug_text = True # True
-show_debug_video = False # False
-show_debug_sample_image = False # False
+show_debug = False # False
 
-# -----------------
+# -- Notification controls
 
-wait_time_before_sending_notifications_in_seconds = 60 * 1 # 60 * 1
+show_notification = True # True
+wait_time_before_sending_notifications_in_seconds = 60 # 60
+
+# -----------------------------
+
 skip_frames = 440 # 440
 max_ocr_checks = 10 # 10
-notif_duration_seconds = 10 # 10
+notif_duration_seconds = 20 # 20
 
 init(autoreset=True)
 stream = streamlink.streams(url)
@@ -38,7 +43,7 @@ notif_sent = False
 
 while True:
     if notif_sent:
-        if show_debug_text:
+        if show_debug:
             print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Sleeping: {wait_time_before_sending_notifications_in_seconds} seconds.")
         time.sleep(wait_time_before_sending_notifications_in_seconds)
         notif_sent = False
@@ -50,10 +55,11 @@ while True:
     frame_width = int(cap.get(3))
     frame_height = int(cap.get(4))
     
-    region_width = 212
-    region_height = 30
-    top_right_x = frame_width - region_width - 28
-    top_right_y = 79
+    region_width = 305
+    x_offset = 15
+    top_right_x = frame_width - region_width - x_offset
+    region_height = 45
+    top_right_y = 86
    
     passed_frames = 0
     ocr_checks_made = 0
@@ -65,14 +71,11 @@ while True:
         if passed_frames >= skip_frames:
             enable_ocr = True
        
-        if show_debug_sample_image:
-            image = cv2.imread('tess_photo_test.png') # test image
-        else:
-            ret, frame = cap.read()
-            if not ret:
-                raise ValueError("Could not read frame")
+        ret, frame = cap.read()
+        if not ret:
+            raise ValueError("Could not read frame")
                 
-            image = frame[top_right_y:top_right_y + region_height, top_right_x:top_right_x + region_width]     
+        image = frame[top_right_y:top_right_y + region_height, top_right_x:top_right_x + region_width]
         
         # preprocessing
         try:
@@ -89,6 +92,9 @@ while True:
         except:
             pass
         
+        if show_debug:
+            cv2.imshow("Twitch Stream", image)
+        
         if enable_ocr:
             if ocr_checks_made >= max_ocr_checks:
                 exit_check = True
@@ -98,7 +104,7 @@ while True:
                 text = ocr_res[0][1]
                 confidence = ocr_res[0][2]
 
-                if show_debug_text:
+                if show_debug:
                     print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Detected text: '{text}', confidence: '{confidence}'")
                 
                 patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI', 'IG1']
@@ -119,33 +125,31 @@ while True:
                         seconds = digits_only[2:4]
                         notif_message = f"[{datetime.datetime.now().strftime('%H:%M:%S')}] forsen mc in-game time is: {minutes}:{seconds}"
                         
-                        if show_debug_text: 
+                        if show_debug: 
                             print(notif_message)
-                        if int(minutes) >= notify_from_minute and int(minutes) <= notify_until_minute:
-                            if show_debug_text:
+                        if int(minutes) >= notify_from_minute and int(minutes) <= notify_until_including_minute:
+                            if show_debug:
                                 print(Fore.RED + f"{notif_message.upper()}" + Style.RESET_ALL)
 
-                            toaster = ToastNotifier()
-                            title = "forsen minecraft"
-                            message = notif_message
-                            
-                            try:
-                                toaster.show_toast(title, message, duration=notif_duration_seconds, callback_on_click=lambda: webbrowser.open_new(url))
-                            except:
-                                raise ValueError("Push window notification error")
-                            
-                            notif_sent = True
+                            if show_notification:
+                                toaster = ToastNotifier()
+                                title = "forsen minecraft"
+                                message = notif_message
+                                
+                                try:
+                                    toaster.show_toast(title, message, duration=notif_duration_seconds, callback_on_click=lambda: webbrowser.open_new(url))
+                                except:
+                                    raise ValueError("Push window notification error")
+                                
+                                notif_sent = True
                             
                         exit_check = True
             
             ocr_checks_made += 1
 
-        if show_debug_video:
-            cv2.imshow("Twitch Stream", image)
-
         passed_frames += 1
 
-        if show_debug_video:
+        if show_debug:
             if cv2.waitKey(1) & 0xFF == ord('d'):
                 enable_ocr = False
             if cv2.waitKey(1) & 0xFF == ord('e'):
@@ -153,7 +157,7 @@ while True:
     
     try:
         cap.release()
-        if show_debug_video:
+        if show_debug:
             cv2.destroyAllWindows()
     except:
         pass
