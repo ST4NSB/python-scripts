@@ -128,10 +128,10 @@ while True:
                     if len(digits_only) >= 4:
                         minutes = digits_only[:2]
                         seconds = digits_only[2:4]
-                        notif_message = f"[{datetime.datetime.now().strftime('%H:%M:%S')}] forsen mc in-game time is: {minutes}:{seconds}"
+                        notif_message = f"forsen mc in-game time is: {minutes}:{seconds}"
                         
                         if show_debug_text: 
-                            print(notif_message)
+                            print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {notif_message}")
                         if int(minutes) >= notify_from_minute and int(minutes) <= notify_until_including_minute:
                             if confidence < 0.4:
                                 if show_debug_text:
