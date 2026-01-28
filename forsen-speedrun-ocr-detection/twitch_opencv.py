@@ -59,8 +59,8 @@ while True:
     region_width = 305
     x_offset = 15
     top_right_x = frame_width - region_width - x_offset
-    region_height = 45
-    top_right_y = 86
+    region_height = 65
+    top_right_y = 90
    
     passed_frames = 0
     ocr_checks_made = 0
@@ -133,7 +133,7 @@ while True:
                         if show_debug_text: 
                             print(notif_message)
                         if int(minutes) >= notify_from_minute and int(minutes) <= notify_until_including_minute:
-                            if confidence < 0.5:
+                            if confidence < 0.4:
                                 if show_debug_text:
                                     print(Fore.YELLOW + f"Low confidence ({confidence}) for detected time '{minutes}:{seconds}'. Notification not sent." + Style.RESET_ALL)
                                 continue
