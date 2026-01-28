@@ -59,8 +59,8 @@ while True:
     region_width = 305
     x_offset = 15
     top_right_x = frame_width - region_width - x_offset
-    region_height = 65
-    top_right_y = 90
+    region_height = 45
+    top_right_y = 86
    
     passed_frames = 0
     ocr_checks_made = 0
