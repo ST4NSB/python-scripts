@@ -36,7 +36,7 @@ confidence_threshold = 0.4
 
 skip_frames = 380
 max_ocr_checks = 15
-notif_duration_seconds = 20
+notif_duration_seconds = 30
 
 init(autoreset=True)
 stream = streamlink.streams(url)
