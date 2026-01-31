@@ -62,6 +62,7 @@ while True:
     frame_width = int(cap.get(3))
     frame_height = int(cap.get(4))
     
+    # captures 'IGT' tag and minutes and seconds only, ex. => IGT: 01:45
     region_width = 200
     x_offset = 112
     top_right_x = frame_width - region_width - x_offset
