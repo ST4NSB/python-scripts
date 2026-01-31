@@ -34,7 +34,7 @@ confidence_threshold = 0.45
 
 # -----------------------------
 
-skip_frames = 200
+skip_frames = 175
 max_ocr_checks = results_to_count
 notif_duration_seconds = 30
 
@@ -118,9 +118,6 @@ while True:
                 igt_number_recognized = ('161', '101')
                 text = text.replace(" ", "").replace("'", "").replace("`", "")
                 text = text.upper()
-                
-                if show_debug_text:
-                    print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Processed text: '{text}'")
 
                 if any([x in text for x in patterns]) or text.startswith(igt_number_recognized):
                     if text.startswith(igt_number_recognized):
@@ -131,10 +128,7 @@ while True:
                     
                     digits_only = re.sub(r'\D', '', text)
                     
-                    if len(digits_only) >= 4:
-                        if len(digits_only) > 4:
-                            digits_only = digits_only[-4:]
-                        
+                    if len(digits_only) == 4:
                         minutes = digits_only[:2]
                         seconds = digits_only[2:4]
                         notif_message = f"forsen mc in-game time is: {minutes}:{seconds}"
