@@ -29,14 +29,14 @@ wait_time_before_sending_notifications_in_seconds = 40 # 40
 
 # -- Others
 
-results_to_count = 4
+results_to_count = 3
 confidence_threshold = 0.4
 
 # -----------------------------
 
-skip_frames = 350
-max_ocr_checks = 12
-notif_duration_seconds = 30
+skip_frames = 380
+max_ocr_checks = 15
+notif_duration_seconds = 20
 
 init(autoreset=True)
 stream = streamlink.streams(url)
@@ -62,8 +62,8 @@ while True:
     frame_width = int(cap.get(3))
     frame_height = int(cap.get(4))
     
-    region_width = 305
-    x_offset = 15
+    region_width = 200
+    x_offset = 112
     top_right_x = frame_width - region_width - x_offset
     region_height = 45
     top_right_y = 86
@@ -114,7 +114,7 @@ while True:
                 if show_debug_text:
                     print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Detected text: '{text}', confidence: '{confidence}'")
                 
-                patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI', 'IG1', '1O1', 'IT', 'TGT']
+                patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI', 'IG1', '1O1', 'IT', 'TGT', "IOH", "IO1"]
                 igt_number_recognized = ('161', '101')
                 text = text.replace(" ", "").replace("'", "").replace("`", "")
                 text = text.upper()
@@ -132,6 +132,9 @@ while True:
                     digits_only = re.sub(r'\D', '', text)
                     
                     if len(digits_only) >= 4:
+                        if len(digits_only) > 4:
+                            digits_only = digits_only[-4:]
+                        
                         minutes = digits_only[:2]
                         seconds = digits_only[2:4]
                         notif_message = f"forsen mc in-game time is: {minutes}:{seconds}"
