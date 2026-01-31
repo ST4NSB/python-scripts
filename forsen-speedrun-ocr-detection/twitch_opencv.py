@@ -25,17 +25,17 @@ show_debug_video = False
 # -- Notification controls
 
 show_notification = True # True
-wait_time_before_sending_notifications_in_seconds = 40 # 40
+wait_time_before_sending_notifications_in_seconds = 40
 
 # -- Others
 
 results_to_count = 3
-confidence_threshold = 0.4
+confidence_threshold = 0.45
 
 # -----------------------------
 
-skip_frames = 380
-max_ocr_checks = 15
+skip_frames = 200
+max_ocr_checks = results_to_count
 notif_duration_seconds = 30
 
 init(autoreset=True)
