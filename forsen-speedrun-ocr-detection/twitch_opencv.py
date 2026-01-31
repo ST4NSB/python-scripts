@@ -114,7 +114,7 @@ while True:
                 if show_debug_text:
                     print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Detected text: '{text}', confidence: '{confidence}'")
                 
-                patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI', 'IG1', '1O1', 'IT', 'TGT', "IOH", "IO1"]
+                patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI', 'IG1', '1O1', 'IT', 'TGT', "IOH", "IO1", "IGM"]
                 igt_number_recognized = ('161', '101')
                 text = text.replace(" ", "").replace("'", "").replace("`", "")
                 text = text.upper()
