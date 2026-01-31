@@ -48,6 +48,8 @@ reader = easyocr.Reader(lang_list=['en'], gpu=True, )
 notif_sent = False
 confirmed_mins = []
 
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+
 while True:
     if notif_sent:
         if show_debug_text:
@@ -85,20 +87,19 @@ while True:
                 
         image = frame[top_right_y:top_right_y + region_height, top_right_x:top_right_x + region_width]
         
-        # preprocessing
-        try:
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            ret, image = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-            image = cv2.GaussianBlur(image, (5, 5), 0)
-            image = cv2.convertScaleAbs(image, alpha=1.5, beta=50)
-            desired_width = 800
-            aspect_ratio = desired_width / image.shape[1]
-            new_height = int(image.shape[0] * aspect_ratio)
-            image = cv2.resize(image, (desired_width, new_height))
-            kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-            image = cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
-        except:
-            pass
+        if enable_ocr:
+            try:
+                image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+                ret, image = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+                image = cv2.GaussianBlur(image, (5, 5), 0)
+                image = cv2.convertScaleAbs(image, alpha=1.5, beta=50)
+                desired_width = 400
+                aspect_ratio = desired_width / image.shape[1]
+                new_height = int(image.shape[0] * aspect_ratio)
+                image = cv2.resize(image, (desired_width, new_height))
+                image = cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
+            except:
+                pass
         
         if show_debug_video:
             cv2.imshow("Twitch Stream", image)
@@ -106,6 +107,7 @@ while True:
         if enable_ocr:
             if ocr_checks_made >= max_ocr_checks:
                 exit_check = True
+                continue
             
             ocr_res = reader.readtext(image)
             if ocr_res:
@@ -115,7 +117,7 @@ while True:
                 if show_debug_text:
                     print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Detected text: '{text}', confidence: '{confidence}'")
                 
-                patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI', 'IG1', '1O1', 'IT', 'TGT', "IOH", "IO1", "IGM"]
+                patterns = ['IGT', 'IOT', 'IOI', 'IOM', 'IGI', 'IG1', '1O1', 'IT', 'TGT', "IOH", "IO1", "IGM", "IG"]
                 igt_number_recognized = ('161', '101')
                 text = text.replace(" ", "").replace("'", "").replace("`", "")
                 text = text.upper()
@@ -128,6 +130,8 @@ while True:
                         text = text.replace(word, "")
                     
                     digits_only = re.sub(r'\D', '', text)
+                    if len(digits_only) != 4:
+                        continue
                     
                     if len(digits_only) == 4:
                         minutes = digits_only[:2]
