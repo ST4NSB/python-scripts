@@ -27,11 +27,16 @@ show_debug_video = False
 show_notification = True # True
 wait_time_before_sending_notifications_in_seconds = 40 # 40
 
+# -- Others
+
+results_to_count = 4
+confidence_threshold = 0.4
+
 # -----------------------------
 
-skip_frames = 440 # 440
-max_ocr_checks = 10 # 10
-notif_duration_seconds = 30 # 30
+skip_frames = 350
+max_ocr_checks = 12
+notif_duration_seconds = 30
 
 init(autoreset=True)
 stream = streamlink.streams(url)
@@ -39,8 +44,9 @@ if not stream:
     raise ValueError(f"The stream '{url}' is not LIVE or AVAILABLE")
 
 stream_url = stream['best'].to_url()
-reader = easyocr.Reader(lang_list=['en'], gpu=True)
+reader = easyocr.Reader(lang_list=['en'], gpu=True, )
 notif_sent = False
+confirmed_mins = []
 
 while True:
     if notif_sent:
@@ -131,17 +137,24 @@ while True:
                         notif_message = f"forsen mc in-game time is: {minutes}:{seconds}"
                         
                         if show_debug_text: 
-                            print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {notif_message}")
+                            print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {notif_message}, confirmed results minutes: {confirmed_mins[-results_to_count:]}")
                         if int(minutes) >= notify_from_minute and int(minutes) <= notify_until_including_minute:
-                            if confidence < 0.4:
+                            if confidence < confidence_threshold:
                                 if show_debug_text:
                                     print(Fore.YELLOW + f"Low confidence ({confidence}) for detected time '{minutes}:{seconds}'. Notification not sent." + Style.RESET_ALL)
                                 continue
+                            else:
+                                confirmed_mins.append(int(minutes))
                             
-                            if show_debug_text:
-                                print(Fore.RED + f"{notif_message.upper()}" + Style.RESET_ALL)
+                            confirmed_last_results = confirmed_mins[-results_to_count:]
+                            if len(confirmed_last_results) < results_to_count:
+                                continue
 
-                            if show_notification:
+                            if show_notification and all(x == int(minutes) for x in confirmed_last_results):
+                                confirmed_mins = []
+                                if show_debug_text:
+                                    print(Fore.RED + f"{notif_message.upper()}" + Style.RESET_ALL)
+                                    
                                 toaster = ToastNotifier()
                                 title = "forsen minecraft"
                                 message = notif_message
