@@ -68,8 +68,8 @@ while True:
     region_width = 200
     x_offset = 112
     top_right_x = frame_width - region_width - x_offset
-    region_height = 45
-    top_right_y = 86
+    region_height = 55
+    top_right_y = 76
    
     passed_frames = 0
     ocr_checks_made = 0
