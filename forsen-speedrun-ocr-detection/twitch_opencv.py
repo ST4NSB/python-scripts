@@ -14,7 +14,7 @@ url = "https://www.twitch.tv/forsen"
 
 # -- User controls
 
-notify_from_minute = 6 # Notifies the user when the in-game time is equal to or greater than this value
+notify_from_minute = 9 # Notifies the user when the in-game time is equal to or greater than this value
 notify_until_including_minute = 16 # Notifies the user when the in-game time is equal to or less than this value
 
 # -- Debug controls
@@ -161,6 +161,11 @@ while True:
                                 title = "forsen minecraft"
                                 message = notif_message
                                 
+                                try:
+                                    webbrowser.open_new(url)
+                                except Exception as e:
+                                    print("Failed to open browser:", e)
+                            
                                 try:
                                     toaster.show_toast(title, message, duration=notif_duration_seconds, callback_on_click=lambda: webbrowser.open_new(url))
                                 except:
