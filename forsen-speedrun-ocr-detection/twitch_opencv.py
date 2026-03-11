@@ -10,7 +10,9 @@ import datetime
 
 # -- Twitch stream URL
 
-url = "https://www.twitch.tv/forsen"
+twitch_tv = "https://www.twitch.tv/"
+streamer = "forsen"
+url = f"{twitch_tv}{streamer}"
 
 # -- User controls
 
@@ -137,7 +139,7 @@ while True:
                     if len(digits_only) == 4:
                         minutes = digits_only[:2]
                         seconds = digits_only[2:4]
-                        notif_message = f"forsen mc in-game time is: {minutes}:{seconds}"
+                        notif_message = f"{streamer} in-game time is: {minutes}:{seconds}"
                         
                         if show_debug_text: 
                             print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {notif_message}, confirmed results minutes: {confirmed_mins[-results_to_count:]}")
@@ -159,7 +161,7 @@ while True:
                                     print(Fore.RED + f"{notif_message.upper()}" + Style.RESET_ALL)
                                     
                                 toaster = ToastNotifier()
-                                title = "forsen minecraft"
+                                title = f"{streamer} minecraft speedrun"
                                 message = notif_message
                                 
                                 if not browser_already_opened:
