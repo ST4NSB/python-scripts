@@ -167,12 +167,12 @@ while True:
                                         webbrowser.open_new(url)
                                         browser_already_opened = True
                                     except Exception as e:
-                                        print("Failed to open browser:", e)
+                                        print(f"{Fore.RED}Failed to open browser: {e}{Style.RESET_ALL}")
                             
                                 try:
                                     toaster.show_toast(title, message, duration=notif_duration_seconds, callback_on_click=lambda: webbrowser.open_new(url))
-                                except:
-                                    raise ValueError("Push window notification error")
+                                except Exception as e:
+                                    print(f"{Fore.RED}Failed to show toast notification: {e}{Style.RESET_ALL}")
                                 
                                 notif_sent = True
                             
