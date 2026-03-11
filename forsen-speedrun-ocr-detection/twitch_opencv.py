@@ -47,6 +47,7 @@ stream_url = stream['best'].to_url()
 reader = easyocr.Reader(lang_list=['en'], gpu=True, )
 notif_sent = False
 confirmed_mins = []
+browser_already_opened = False
 
 kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
 
@@ -161,10 +162,12 @@ while True:
                                 title = "forsen minecraft"
                                 message = notif_message
                                 
-                                try:
-                                    webbrowser.open_new(url)
-                                except Exception as e:
-                                    print("Failed to open browser:", e)
+                                if not browser_already_opened:
+                                    try:
+                                        webbrowser.open_new(url)
+                                        browser_already_opened = True
+                                    except Exception as e:
+                                        print("Failed to open browser:", e)
                             
                                 try:
                                     toaster.show_toast(title, message, duration=notif_duration_seconds, callback_on_click=lambda: webbrowser.open_new(url))
